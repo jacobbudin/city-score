@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "city_score"
 description = "A command-line application for scoring US cities and towns."
@@ -30,7 +34,7 @@ dependencies = [
 dynamic = ["version"]
 
 [tool.setuptools]
-package-dir = {"" = "src/city_score"}
+package-dir = {"" = "src"}
 
 [tool.setuptools.dynamic]
-version = {attr = "__version__.__version__"}
+version = {attr = "city_score.__version__.__version__"}
