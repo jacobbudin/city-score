@@ -67,9 +67,9 @@ City Score uses a three-step process:
 2. Create a script (`myscore.py`) like this:
     ```python
     from city_score import run
+    from city_score.sources.core import *
     from city_score.sources.peopleforbikes import *
     from city_score.sources.zillow import *
-    from city_score.sources.core import *
 
     sources = (
         PeopleForBikes,
