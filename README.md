@@ -69,6 +69,7 @@ City Score uses a three-step process:
     from city_score import run
     from city_score.sources.peopleforbikes import *
     from city_score.sources.zillow import *
+    from city_score.sources.core import *
 
     sources = (
         PeopleForBikes,
