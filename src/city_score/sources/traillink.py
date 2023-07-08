@@ -38,9 +38,9 @@ def trail_count(city):
     if response.status_code == 200:
         parser = InputValueAttributeParser()
         parser.feed(response.text)
-        count = parser.results_count_value
-        cache.set(key, int(count))
-        return int(count)
+        count = int(parser.results_count_value)
+        cache.set(key, count)
+        return count
 
 @scorer('TrailLink')
 def trail_count_scorer(city, lower, upper):
