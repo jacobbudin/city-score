@@ -28,7 +28,7 @@ def trail_count(city):
     key = 'traillink-%s' % (str(city))
     count = cache.get(key)
     if count is not None:
-        return int(count)
+        return count
     
     response = requests.get(TrailLink.base_url, params={
         "city": city.name,
