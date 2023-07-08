@@ -26,7 +26,6 @@ def minimum_trail_count(city, min_count):
 @dimension('TrailLink')
 def trail_count(city):
     key = 'traillink-%s' % (str(city))
-
     count = cache.get(key)
     if count is not None:
         return int(count)
