@@ -1,5 +1,5 @@
 from ..cache import cache
-from ..decorators import criterion, dimension, scorer
+from ..decorators import dimension, scorer
 from ..source import Source
 from html.parser import HTMLParser
 import requests
@@ -17,11 +17,6 @@ class InputValueAttributeParser(HTMLParser):
 
 class TrailLink(Source):
     base_url = "https://www.traillink.com/trailsearch"
-
-@criterion("Minimum TrailLink count")
-def minimum_trail_count(city, min_count):
-    _count = trail_count(city)
-    return _count >= min_count
 
 @dimension('TrailLink')
 def trail_count(city):
