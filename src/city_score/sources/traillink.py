@@ -5,10 +5,6 @@ from html.parser import HTMLParser
 import requests
 
 class InputValueAttributeParser(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.value_attribute = None
-
     def handle_starttag(self, tag, attrs):
         if tag == "input":
             attrs_dict = dict(attrs)
