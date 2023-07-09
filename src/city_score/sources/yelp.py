@@ -19,7 +19,7 @@ def nearby(city, q="", miles=10, exact=True):
         return count
     
     with YelpAPI(Yelp.API_KEY) as yelp_api:
-        results = yelp_api.search_query(term=q, location=str(city), radius=miles*1609)
+        results = yelp_api.search_query(term=q, location=str(city), radius=miles*1609, limit=50)
         if not exact:
             count = len(results['businesses'])
         else:
