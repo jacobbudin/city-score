@@ -24,7 +24,6 @@ class TrailLinkMilesParser(HTMLParser):
         if tag == "span" and self.found:
             self.found = False
 
-
 class TrailLink(Source):
     base_url = "https://www.traillink.com/trailsearch"
 
