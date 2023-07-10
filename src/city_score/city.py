@@ -9,6 +9,7 @@ class City:
     state: str
     lat: float
     lng: float
+    state_name: str
     data: dict = field(default_factory=dict)
     last_score: int = -1
 
@@ -58,11 +59,10 @@ def get_cities():
     with Core.open('cities.csv') as f:
         city_reader = csv.DictReader(f)
         for city_row in city_reader:
-            city = City(city_row['CITY'], city_row['STATE_CODE'], float(city_row['LATITUDE']), float(city_row['LONGITUDE']))
+            city = City(city_row['CITY'], city_row['STATE_CODE'], float(city_row['LATITUDE']), float(city_row['LONGITUDE']), city_row['STATE_NAME'])
             city_str = str(city)
 
             if city_str in city_strs:
                 continue
-
             city_strs.add(city_str)
             yield city
