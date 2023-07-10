@@ -46,7 +46,6 @@ def nearby_parks_accessibility(city):
         parser = TrustForPublicLandResultParser()
         parser.feed(response.text)
         cache.set(key, parser.text_content)
-        print(parser.text_content)
         return parser.text_content
     return '?'
 
