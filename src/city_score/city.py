@@ -3,13 +3,65 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from .sources.core import Core
 
+state_names = {
+    "AL":"Alabama",
+    "AK":"Alaska",
+    "AZ":"Arizona",
+    "AR":"Arkansas",
+    "CA":"California",
+    "CO":"Colorado",
+    "CT":"Connecticut",
+    "DE":"Delaware",
+    "FL":"Florida",
+    "GA":"Georgia",
+    "HI":"Hawaii",
+    "ID":"Idaho",
+    "IL":"Illinois",
+    "IN":"Indiana",
+    "IA":"Iowa",
+    "KS":"Kansas",
+    "KY":"Kentucky",
+    "LA":"Louisiana",
+    "ME":"Maine",
+    "MD":"Maryland",
+    "MA":"Massachusetts",
+    "MI":"Michigan",
+    "MN":"Minnesota",
+    "MS":"Mississippi",
+    "MO":"Missouri",
+    "MT":"Montana",
+    "NE":"Nebraska",
+    "NV":"Nevada",
+    "NH":"New Hampshire",
+    "NJ":"New Jersey",
+    "NM":"New Mexico",
+    "NY":"New York",
+    "NC":"North Carolina",
+    "ND":"North Dakota",
+    "OH":"Ohio",
+    "OK":"Oklahoma",
+    "OR":"Oregon",
+    "PA":"Pennsylvania",
+    "RI":"Rhode Island",
+    "SC":"South Carolina",
+    "SD":"South Dakota",
+    "TN":"Tennessee",
+    "TX":"Texas",
+    "UT":"Utah",
+    "VT":"Vermont",
+    "VA":"Virginia",
+    "WA":"Washington",
+    "WV":"West Virginia",
+    "WI":"Wisconsin",
+    "WY":"Wyoming"
+}
+
 @dataclass
 class City:
     name: str
     state: str
     lat: float
     lng: float
-    state_name: str
     data: dict = field(default_factory=dict)
     last_score: int = -1
 
@@ -27,6 +79,10 @@ class City:
     @property
     def coordinates(self):
         return (self.lat, self.lng)
+    
+    @property
+    def state_name(self):
+        return state_names[self.state]
 
     def update(self, data):
         self.data.update(data)
@@ -59,7 +115,7 @@ def get_cities():
     with Core.open('cities.csv') as f:
         city_reader = csv.DictReader(f)
         for city_row in city_reader:
-            city = City(city_row['CITY'], city_row['STATE_CODE'], float(city_row['LATITUDE']), float(city_row['LONGITUDE']), city_row['STATE_NAME'])
+            city = City(city_row['CITY'], city_row['STATE_CODE'], float(city_row['LATITUDE']), float(city_row['LONGITUDE']))
             city_str = str(city)
 
             if city_str in city_strs:
