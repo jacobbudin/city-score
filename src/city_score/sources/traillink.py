@@ -45,7 +45,7 @@ class TrailLinkMilesParser(HTMLParser):
 class TrailLink(Source):
     base_url = 'https://www.traillink.com/trailsearch'
 
-def format(number):
+def format_miles(number):
     return f'{number} miles'
 
 @dimension('TrailLink Mileage')
@@ -53,7 +53,7 @@ def trail_total_miles(city, activities=[], min_length=5):
     key = 'traillink-%s-%s' % (str(city), str("-".join(activity.replace(" ", "") for activity in activities)))
     count = cache.get(key)
     if count is not None:
-        return format(count)
+        return format_miles(count)
     
     activity_values = []
     for activity in activities:
@@ -72,7 +72,7 @@ def trail_total_miles(city, activities=[], min_length=5):
         parser.feed(response.text)
         count = int(parser.total_trail_miles)
         cache.set(key, count)
-        return format(count)
+        return format_miles(count)
 
 @scorer('TrailLink')
 def trail_total_miles_scorer(city, lower, upper, activities=[]):
