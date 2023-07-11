@@ -49,8 +49,8 @@ def format_miles(number):
     return f'{number} miles'
 
 @dimension('TrailLink Mileage')
-def trail_total_miles(city, activities=[], min_length=5):
-    key = 'traillink-%s-%s' % (str(city), str("-".join(activity.replace(" ", "") for activity in activities)))
+def trail_total_miles(city, activities=[], min_length_miles=0):
+    key = 'traillink-%s-%s-%s' % (str(city), str("-".join(activity.replace(" ", "") for activity in activities)), str(min_length_miles))
     count = cache.get(key)
     if count is not None:
         return format_miles(count)
@@ -63,7 +63,7 @@ def trail_total_miles(city, activities=[], min_length=5):
         'city': city.name,
         'state': city.state,
         'activities': ",".join(activity_values),
-        'length': f'{min_length}|99999'
+        'length': f'{min_length_miles}|99999'
     }
     response = requests.get(TrailLink.base_url, params)
 
