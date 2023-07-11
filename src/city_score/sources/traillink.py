@@ -48,18 +48,15 @@ class TrailLink(Source):
 def format_miles(number):
     return f'{number} miles'
 
-@dimension('TrailLink Mileage')
-def trail_total_miles(city, activities=[], min_length_miles=0):
-    key = 'traillink-%s-%s-%s' % (str(city), str("-".join(activity.replace(" ", "") for activity in activities)), str(min_length_miles))
-    count = cache.get(key)
-    if count is not None:
-        return format_miles(count)
-    
+def scrap_total_miles(city, activities, min_length_miles):
+    """Request TrailLink page and return sum of total trail miles"""
+    num_miles = 0
+
     activity_values = []
     for activity in activities:
         activity_values.append(activities_filter[activity])
 
-    params={
+    params = {
         'city': city.name,
         'state': city.state,
         'activities': ",".join(activity_values),
@@ -70,18 +67,30 @@ def trail_total_miles(city, activities=[], min_length_miles=0):
     if response.status_code == 200:
         parser = TrailLinkMilesParser()
         parser.feed(response.text)
-        count = int(parser.total_trail_miles)
-        cache.set(key, count)
-        return format_miles(count)
+        num_miles = int(parser.total_trail_miles)
+
+    return num_miles
+
+@dimension('TrailLink Mileage')
+def trail_total_miles(city, activities=[], min_length_miles=0):
+    key = 'traillink-%s-%s-%s' % (
+        str(city),
+        str('-'.join(activity.replace(' ', '') for activity in activities)),
+        str(min_length_miles),
+    )
+    num_miles = cache.get(key)
+    if num_miles is not None:
+        return format_miles(num_miles)
+
+    num_miles = scrap_total_miles(city, activities, min_length_miles)
+    cache.set(key, num_miles)
+    return format_miles(num_miles)
 
 @scorer('TrailLink')
-def trail_total_miles_scorer(city, lower, upper, activities=[]):
-    data = trail_total_miles(city, activities)
-    if data == '?': return 0
-
-    count = float(data.split(' ')[0])
-    if count >= upper:
+def trail_total_miles_scorer(city, lower, upper, activities=[], min_length_miles=0):
+    num_miles = scrap_total_miles(city, activities, min_length_miles)
+    if num_miles >= upper:
         return 100
-    if count >= lower:
-        return round(((count - lower) / (upper - lower)) * 100)
+    if num_miles >= lower:
+        return round(((num_miles - lower) / (upper - lower)) * 100)
     return 0
