@@ -50,7 +50,14 @@ def format_miles(number):
 
 def scrape_total_miles(city, activities, min_length_miles):
     """Request TrailLink page and return sum of total trail miles"""
-    num_miles = 0
+    key = 'traillink-%s-%s-%s' % (
+        str(city),
+        str('-'.join(activity.replace(' ', '') for activity in activities)),
+        str(min_length_miles),
+    )
+    num_miles = cache.get(key)
+    if num_miles is not None:
+        return num_miles
 
     activity_values = []
     for activity in activities:
@@ -68,22 +75,13 @@ def scrape_total_miles(city, activities, min_length_miles):
         parser = TrailLinkMilesParser()
         parser.feed(response.text)
         num_miles = int(parser.total_trail_miles)
+        cache.set(key, num_miles)
 
     return num_miles
 
 @dimension('TrailLink Mileage')
 def trail_total_miles(city, activities=[], min_length_miles=0):
-    key = 'traillink-%s-%s-%s' % (
-        str(city),
-        str('-'.join(activity.replace(' ', '') for activity in activities)),
-        str(min_length_miles),
-    )
-    num_miles = cache.get(key)
-    if num_miles is not None:
-        return format_miles(num_miles)
-
     num_miles = scrape_total_miles(city, activities, min_length_miles)
-    cache.set(key, num_miles)
     return format_miles(num_miles)
 
 @scorer('TrailLink')
