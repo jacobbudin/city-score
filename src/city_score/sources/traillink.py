@@ -48,7 +48,7 @@ class TrailLink(Source):
 def format_miles(number):
     return f'{number} miles'
 
-def scrap_total_miles(city, activities, min_length_miles):
+def scrape_total_miles(city, activities, min_length_miles):
     """Request TrailLink page and return sum of total trail miles"""
     num_miles = 0
 
@@ -82,13 +82,13 @@ def trail_total_miles(city, activities=[], min_length_miles=0):
     if num_miles is not None:
         return format_miles(num_miles)
 
-    num_miles = scrap_total_miles(city, activities, min_length_miles)
+    num_miles = scrape_total_miles(city, activities, min_length_miles)
     cache.set(key, num_miles)
     return format_miles(num_miles)
 
 @scorer('TrailLink')
 def trail_total_miles_scorer(city, lower, upper, activities=[], min_length_miles=0):
-    num_miles = scrap_total_miles(city, activities, min_length_miles)
+    num_miles = scrape_total_miles(city, activities, min_length_miles)
     if num_miles >= upper:
         return 100
     if num_miles >= lower:
