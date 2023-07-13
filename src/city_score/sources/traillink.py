@@ -4,22 +4,22 @@ from ..source import Source
 from html.parser import HTMLParser
 import requests
 
-activities_filter = {
-    'Atv': 'ATV',
-    'Bike': 'BIKE',
-    'Birding': 'BIRD',
-    'Cross Country Skiing': 'XSKI',
-    'Dog Walking': 'DOG',
-    'Fishing': 'FISH',
-    'Geocaching': 'GEO',
-    'Hiking': 'HIKE',
-    'Horseback Riding': 'HORSE',
-    'Inline Skating': 'SKTS',
-    'Mountain Biking': 'MTBK',
-    'Running': 'RUN',
-    'Snowmobiling': 'SNOW',
-    'Walking': 'WALK',
-    'Wheelchair Accessible': 'WHEEL'
+activities_map = {
+    'ATV': 'Atv', 
+    'BIKE': 'Bike', 
+    'BIRD': 'Birding', 
+    'XSKI': 'Cross Country Skiing', 
+    'DOG': 'Dog Walking', 
+    'FISH': 'Fishing', 
+    'GEO': 'Geocaching', 
+    'HIKE': 'Hiking', 
+    'HORSE': 'Horseback Riding', 
+    'SKTS': 'Inline Skating', 
+    'MTBK': 'Mountain Biking', 
+    'RUN': 'Running', 
+    'SNOW': 'Snowmobiling', 
+    'WALK': 'Walking', 
+    'WHEEL': 'Wheelchair Accessible'
 }
 
 class TrailLinkMilesParser(HTMLParser):
@@ -59,14 +59,14 @@ def scrape_total_miles(city, activities, min_length_miles):
     if num_miles is not None:
         return num_miles
 
-    activity_values = []
-    for activity in activities:
-        activity_values.append(activities_filter[activity])
+    activity_values = [
+        k for k, v in activities_map.items() if v in activities
+    ]
 
     params = {
         'city': city.name,
         'state': city.state,
-        'activities': ",".join(activity_values),
+        'activities': ','.join(activity_values),
         'length': f'{min_length_miles}|99999'
     }
     response = requests.get(TrailLink.base_url, params)
