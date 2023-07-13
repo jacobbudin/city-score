@@ -74,7 +74,7 @@ def scrape_total_miles(city, activities, min_length_miles):
     if response.status_code == 200:
         parser = TrailLinkMilesParser()
         parser.feed(response.text)
-        num_miles = int(parser.total_trail_miles)
+        num_miles = round(parser.total_trail_miles)
         cache.set(key, num_miles)
 
     return num_miles
