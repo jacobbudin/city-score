@@ -79,7 +79,7 @@ def scrape_total_miles(city, activities, min_length_miles):
 
     return num_miles
 
-@dimension('TrailLink Mileage')
+@dimension('TrailLink miles')
 def trail_total_miles(city, activities=[], min_length_miles=0):
     num_miles = scrape_total_miles(city, activities, min_length_miles)
     return format_miles(num_miles)
