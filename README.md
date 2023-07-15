@@ -105,6 +105,7 @@ City Score uses a three-step process:
 ## Data sources
 - 🚲 PeopleForBikes provides a score for biking infrastructure.
 - 🏂 Snowpak provides the name and location of most ski resorts.
+- 🏃🏻 TrailLink provides the number of nearby trail miles.
 - 🍕 Yelp provides data on many points of interest, including businesses.
 - 🏡 Zillow provides estimates for home and rent prices.
 
